@@ -7,9 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableBatchProcessing
 @SpringBootApplication
 public class SpringBatchExampleApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SpringBatchExampleApplication.class, args);
     }
-
 }
