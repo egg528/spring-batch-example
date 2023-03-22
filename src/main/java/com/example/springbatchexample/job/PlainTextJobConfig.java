@@ -1,7 +1,9 @@
 package com.example.springbatchexample.job;
 
 import com.example.springbatchexample.core.domain.PlainText;
+import com.example.springbatchexample.core.domain.ResultText;
 import com.example.springbatchexample.core.repository.PlainTextRepository;
+import com.example.springbatchexample.core.repository.ResultTextRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -31,6 +33,7 @@ public class PlainTextJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final PlainTextRepository plainTextRepository;
+    private final ResultTextRepository resultTextRepository;
 
     @Bean("plainTextJob")
     public Job plainTextJob(Step plainTextStep) {
@@ -68,14 +71,14 @@ public class PlainTextJobConfig {
     @StepScope
     @Bean
     public ItemProcessor<PlainText, String> plainTextProcessor() {
-        return item -> "processed" + item.getText();
+        return item -> "processed - " + item.getText();
     }
 
     @StepScope
     @Bean
     public ItemWriter<String> plainTextWriter() {
         return items -> {
-            items.forEach(System.out::println);
+            items.forEach(item -> resultTextRepository.save(new ResultText(null, item)));
             System.out.println("========== chunk is finished ========== ");
         };
     }
